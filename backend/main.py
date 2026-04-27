@@ -13,6 +13,7 @@ from models.schemas import (
 from engines.route import generate_routes, classify_routes
 from engines.true_cost import detect_cost_illusion
 from engines.recommendation import generate_recommendation
+from engines.insights import generate_ai_insights
 
 app = FastAPI(
     title="TradeRoute AI",
@@ -99,10 +100,13 @@ def analyze(req: AnalyzeRequest):
             ],
         )
 
+        ai_insights = generate_ai_insights(req, route_models, rec_model)
+
         return AnalyzeResponse(
             hsn_code=req.hsn_code, origin=req.origin, destination=req.destination,
             quantity=req.quantity, invoice_value=req.invoice_value,
             routes=route_models, recommendation=rec_model, business_impact=biz,
+            ai_insights=ai_insights,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

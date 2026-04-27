@@ -124,7 +124,7 @@ export default function Home() {
 
             {/* Explanation Panel */}
             <section id="recommendation-explanation">
-              <ExplanationPanel recommendation={data.recommendation} routes={data.routes} />
+              <ExplanationPanel recommendation={data.recommendation} routes={data.routes} ai_insights={data.ai_insights} />
             </section>
 
             {/* Business Impact */}

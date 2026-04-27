@@ -71,4 +71,5 @@ export interface AnalyzeResponse {
   routes: Route[];
   recommendation: Recommendation;
   business_impact: BusinessImpact;
+  ai_insights?: string;
 }

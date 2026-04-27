@@ -129,3 +129,4 @@ class AnalyzeResponse(BaseModel):
     routes: List[Route]
     recommendation: Recommendation
     business_impact: BusinessImpact
+    ai_insights: Optional[str] = Field(None, description="AI-generated strategic insights from Gemini")
