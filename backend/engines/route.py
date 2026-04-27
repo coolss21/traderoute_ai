@@ -67,14 +67,23 @@ def generate_routes(origin, destination, hsn_code, quantity, invoice_value, urge
                         display_origin = "Taiwan"
                         start_city = "Taipei"
 
+            # Dynamically replace the start and final destination city
+            dynamic_path = [start_city] + tmpl["path"][1:-1] + [destination.title()]
+
             cost = calculate_landed_cost(invoice_value, quantity, hsn_code, tmpl)
-            risk = compute_risk(display_origin, tmpl["port"], tmpl["mode"], tmpl["transit_days"], invoice_value, urgency, simulate_disruption)
+            risk = compute_risk(
+                display_origin, 
+                tmpl["port"], 
+                tmpl["mode"], 
+                tmpl["transit_days"], 
+                invoice_value, 
+                urgency, 
+                simulate_disruption,
+                route_path=dynamic_path
+            )
             tc = compute_true_cost(cost["total_landed_cost"], risk["hidden_cost"])
             
             name_prefix = f"{display_origin} → " if origin.strip().lower() == "global auto-detect" else ""
-            
-            # Dynamically replace the start and final destination city
-            dynamic_path = [start_city] + tmpl["path"][1:-1] + [destination.title()]
             
             # ESG / CO2 Calculation
             base_weight_kg = quantity * 0.5

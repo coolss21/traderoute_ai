@@ -25,6 +25,7 @@ def compute_risk(
     invoice_value: float,
     urgency: str,
     simulate_disruption: str = None,
+    route_path: list = None,
 ) -> Dict[str, Any]:
     """
     Full risk assessment for a route.
@@ -54,7 +55,9 @@ def compute_risk(
     active_disruption = None
     disrupted_nodes = []
 
-    combined = f"{origin} {port_name}".lower()
+    # Check all nodes in the path for disruptions, or just origin + port if no path provided
+    nodes_to_check = route_path if route_path else [origin, port_name]
+    combined = " ".join([str(n).lower() for n in nodes_to_check])
     
     if simulate_disruption == "typhoon":
         typhoon_zones = {
