@@ -97,9 +97,10 @@ interface Props {
   width: number;
   height: number;
   showAllPorts?: boolean;
+  isSpinning?: boolean;
 }
 
-export default function GlobeMapInner({ routes, hoveredRoute, width, height, showAllPorts }: Props) {
+export default function GlobeMapInner({ routes, hoveredRoute, width, height, showAllPorts, isSpinning = true }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const globeEl = useRef<any>(null);
 
@@ -108,8 +109,8 @@ export default function GlobeMapInner({ routes, hoveredRoute, width, height, sho
     if (!globe) return;
 
     const controls = globe.controls();
-    // Slow auto-rotate
-    controls.autoRotate = true;
+    // Auto-rotate
+    controls.autoRotate = isSpinning;
     controls.autoRotateSpeed = 0.3;
     // Zoom limits
     controls.enableZoom = true;
@@ -120,7 +121,7 @@ export default function GlobeMapInner({ routes, hoveredRoute, width, height, sho
     controls.maxPolarAngle = Math.PI * 5 / 6; // ~150°
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-  }, []);
+  }, [isSpinning]);
 
   const arcsData: ArcDatum[] = useMemo(() => {
     const arcs: ArcDatum[] = [];

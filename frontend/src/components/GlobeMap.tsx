@@ -15,6 +15,7 @@ export default function GlobeMap({ routes, hoveredRoute }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(800);
   const [showAllPorts, setShowAllPorts] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(true);
   const HEIGHT = 520;
 
   useEffect(() => {
@@ -46,16 +47,28 @@ export default function GlobeMap({ routes, hoveredRoute }: Props) {
 
         {/* Legend & Controls */}
         <div className="flex flex-col gap-3 items-end">
-          <button
-            onClick={() => setShowAllPorts(!showAllPorts)}
-            className={`text-xs px-3 py-1.5 rounded-lg border transition-all duration-200 font-semibold ${
-              showAllPorts 
-                ? "bg-brand-500/20 text-brand-300 border-brand-500/30" 
-                : "bg-white/[0.05] text-white/60 border-white/[0.08] hover:bg-white/[0.1] hover:text-white"
-            }`}
-          >
-            {showAllPorts ? "🛳️ Hide Major Ports" : "🛳️ Show Major Ports"}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsSpinning(!isSpinning)}
+              className={`text-xs px-3 py-1.5 rounded-lg border transition-all duration-200 font-semibold ${
+                isSpinning 
+                  ? "bg-brand-500/20 text-brand-300 border-brand-500/30" 
+                  : "bg-white/[0.05] text-white/60 border-white/[0.08] hover:bg-white/[0.1] hover:text-white"
+              }`}
+            >
+              {isSpinning ? "🛑 Stop Globe" : "🌍 Spin Globe"}
+            </button>
+            <button
+              onClick={() => setShowAllPorts(!showAllPorts)}
+              className={`text-xs px-3 py-1.5 rounded-lg border transition-all duration-200 font-semibold ${
+                showAllPorts 
+                  ? "bg-brand-500/20 text-brand-300 border-brand-500/30" 
+                  : "bg-white/[0.05] text-white/60 border-white/[0.08] hover:bg-white/[0.1] hover:text-white"
+              }`}
+            >
+              {showAllPorts ? "🛳️ Hide Major Ports" : "🛳️ Show Major Ports"}
+            </button>
+          </div>
           
           <div className="glass-card px-4 py-3 border-white/5 flex flex-col gap-2.5 bg-surface-950/90 backdrop-blur-xl shadow-2xl">
             {[
@@ -95,6 +108,7 @@ export default function GlobeMap({ routes, hoveredRoute }: Props) {
             width={width}
             height={HEIGHT}
             showAllPorts={showAllPorts}
+            isSpinning={isSpinning}
           />
         )}
       </div>
