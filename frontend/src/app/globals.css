@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply box-border; }
+  body {
+    @apply bg-surface-950 text-white antialiased;
+    font-feature-settings: "cv11", "ss01", "ss03";
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
+  }
+  .glass-card-hover:hover {
+    @apply bg-white/[0.07] border-white/[0.15];
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-brand-300 to-cyan-300;
+  }
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-500 text-white font-semibold rounded-xl
+           hover:from-brand-500 hover:to-brand-400 transition-all duration-300
+           shadow-lg shadow-brand-500/25 hover:shadow-brand-400/40
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl
+           text-white placeholder-white/30 outline-none
+           focus:border-brand-500/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-brand-500/20
+           transition-all duration-200;
+  }
+  .select-field {
+    @apply w-full px-4 py-3 bg-white/[0.06] border border-white/[0.1] rounded-xl
+           text-white outline-none appearance-none cursor-pointer
+           focus:border-brand-500/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-brand-500/20
+           transition-all duration-200;
+  }
+  .badge-success { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-success-500/20 text-success-400 border border-success-500/30; }
+  .badge-danger  { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-danger-500/20  text-danger-400  border border-danger-500/30; }
+  .badge-warning { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-warning-500/20 text-warning-400 border border-warning-500/30; }
+  .badge-brand   { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20   text-brand-400   border border-brand-500/30; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Recharts customizations */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255,255,255,0.06) !important;
+}
