@@ -15,7 +15,7 @@ const ROUTE_TEMPLATES = [
     route_type: "cheapest",
     name: "Sea via Mumbai",
     mode: "sea",
-    path_template: (origin: string) => [origin, "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", "Pune"],
+    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", "Pune"],
     transit_days: 28,
     port_name: "JNPT Mumbai",
     co2_factor: 0.012, // kg per $ of invoice
@@ -40,7 +40,7 @@ const ROUTE_TEMPLATES = [
     route_type: "balanced",
     name: "Sea via Chennai",
     mode: "sea",
-    path_template: (origin: string) => [origin, "Malacca Strait", "Bay of Bengal", "Chennai Port", "Pune"],
+    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Malacca Strait", "Bay of Bengal", "Chennai Port", "Pune"],
     transit_days: 30,
     port_name: "Chennai Port",
     co2_factor: 0.011,
@@ -65,7 +65,7 @@ const ROUTE_TEMPLATES = [
     route_type: "fastest",
     name: "Air via Delhi",
     mode: "air",
-    path_template: (origin: string) => [origin, "Delhi IGI Airport", "Pune"],
+    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Delhi IGI Airport", "Pune"],
     transit_days: 5,
     port_name: "Delhi IGI",
     co2_factor: 0.14, // air has much higher CO2
