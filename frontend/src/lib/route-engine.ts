@@ -15,10 +15,16 @@ const ROUTE_TEMPLATES = [
     route_type: "cheapest",
     name: "Sea via Mumbai",
     mode: "sea",
-    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", "Pune"],
+    path_template: (origin: string, dest: string) => [
+      origin === "China" ? "Shenzhen" : "Ho Chi Minh City",
+      "Malacca Strait",
+      "Strait of Hormuz",
+      "JNPT Mumbai",
+      dest
+    ],
     transit_days: 28,
     port_name: "JNPT Mumbai",
-    co2_factor: 0.012, // kg per $ of invoice
+    co2_factor: 0.012,
     freight_rate_per_kg: 1.2,
     min_freight: 850,
     insurance_rate: 0.005,
@@ -26,13 +32,13 @@ const ROUTE_TEMPLATES = [
     domestic_transport: 180,
     warehousing_per_day: 40,
     warehousing_days: 3,
-    timeline: (origin: string) => [
+    timeline: (origin: string, dest: string) => [
       { title: "Cargo Pickup", location: origin, duration_days: 2, icon: "📦" },
       { title: "Port Loading", location: `${origin} Port`, duration_days: 3, icon: "🚢" },
       { title: "Ocean Transit", location: "South China Sea → Indian Ocean", duration_days: 16, icon: "🌊" },
       { title: "Port Discharge", location: "JNPT Mumbai", duration_days: 4, icon: "⚓" },
       { title: "Customs Clearance", location: "JNPT Mumbai", duration_days: 2, icon: "🛃" },
-      { title: "Delivery", location: "Pune", duration_days: 1, icon: "🏭" },
+      { title: "Delivery", location: dest, duration_days: 1, icon: "🏭" },
     ],
   },
   {
@@ -40,7 +46,13 @@ const ROUTE_TEMPLATES = [
     route_type: "balanced",
     name: "Sea via Chennai",
     mode: "sea",
-    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Malacca Strait", "Bay of Bengal", "Chennai Port", "Pune"],
+    path_template: (origin: string, dest: string) => [
+      origin === "China" ? "Shenzhen" : "Ho Chi Minh City",
+      "Malacca Strait",
+      "Bay of Bengal",
+      "Chennai Port",
+      dest
+    ],
     transit_days: 30,
     port_name: "Chennai Port",
     co2_factor: 0.011,
@@ -51,13 +63,13 @@ const ROUTE_TEMPLATES = [
     domestic_transport: 420,
     warehousing_per_day: 38,
     warehousing_days: 3,
-    timeline: (origin: string) => [
+    timeline: (origin: string, dest: string) => [
       { title: "Cargo Pickup", location: origin, duration_days: 2, icon: "📦" },
       { title: "Port Loading", location: `${origin} Port`, duration_days: 3, icon: "🚢" },
       { title: "Ocean Transit", location: "South China Sea → Bay of Bengal", duration_days: 18, icon: "🌊" },
       { title: "Port Discharge", location: "Chennai Port", duration_days: 3, icon: "⚓" },
       { title: "Customs Clearance", location: "Chennai Port", duration_days: 2, icon: "🛃" },
-      { title: "Delivery to Pune", location: "Pune", duration_days: 2, icon: "🏭" },
+      { title: "Delivery", location: dest, duration_days: 2, icon: "🏭" },
     ],
   },
   {
@@ -65,10 +77,14 @@ const ROUTE_TEMPLATES = [
     route_type: "fastest",
     name: "Air via Delhi",
     mode: "air",
-    path_template: (origin: string) => [origin === "China" ? "Shenzhen" : "Ho Chi Minh City", "Delhi IGI Airport", "Pune"],
+    path_template: (origin: string, dest: string) => [
+      origin === "China" ? "Shenzhen" : "Ho Chi Minh City",
+      "Delhi IGI Airport",
+      dest
+    ],
     transit_days: 5,
     port_name: "Delhi IGI",
-    co2_factor: 0.14, // air has much higher CO2
+    co2_factor: 0.14,
     freight_rate_per_kg: 6.5,
     min_freight: 2200,
     insurance_rate: 0.004,
@@ -76,12 +92,12 @@ const ROUTE_TEMPLATES = [
     domestic_transport: 380,
     warehousing_per_day: 55,
     warehousing_days: 1,
-    timeline: (origin: string) => [
+    timeline: (origin: string, dest: string) => [
       { title: "Cargo Pickup", location: origin, duration_days: 1, icon: "📦" },
       { title: "Air Freight Loading", location: `${origin} Airport`, duration_days: 1, icon: "✈️" },
       { title: "Air Transit", location: "China → India Airspace", duration_days: 1, icon: "🛫" },
       { title: "Customs Clearance", location: "Delhi IGI Airport", duration_days: 1, icon: "🛃" },
-      { title: "Express Delivery", location: "Pune", duration_days: 1, icon: "🏭" },
+      { title: "Express Delivery", location: dest, duration_days: 1, icon: "🏭" },
     ],
   },
 ];
@@ -112,14 +128,14 @@ export interface GenerateRoutesParams {
 
 export function generateRoutes(params: GenerateRoutesParams): RouteWithRisk[] {
   const {
-    origin, hsnCode, quantity, invoiceValue, urgency, simulateDisruption,
+    origin, destination, hsnCode, quantity, invoiceValue, urgency, simulateDisruption,
   } = params;
 
   const originCity = resolveOriginCity(origin);
 
   return ROUTE_TEMPLATES.map((template) => {
-    const path = template.path_template(originCity);
-    const timeline = template.timeline(originCity);
+    const path = template.path_template(originCity, destination);
+    const timeline = template.timeline(originCity, destination);
 
     const routeParams = {
       freight_rate_per_kg: template.freight_rate_per_kg,

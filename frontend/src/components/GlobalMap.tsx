@@ -22,11 +22,11 @@ const cityCoordinates: Record<string, [number, number]> = {
   Pune: [73.8567, 18.5204],
   "Chennai Port": [80.2707, 13.0827],
   Delhi: [77.1025, 28.7041],
+  "Delhi IGI Airport": [77.10, 28.55],
   Mundra: [69.7343, 22.8441],
   "Mundra Port": [69.7343, 22.8441],
   "Mumbai Port (JNPT)": [72.95, 18.95],
   "JNPT Mumbai": [72.95, 18.95],
-  "Delhi IGI Airport": [77.10, 28.55],
   "Mumbai Airport": [72.8777, 19.0760],
   // Shipping lane waypoints
   "Malacca Strait": [103.5, 1.5],
