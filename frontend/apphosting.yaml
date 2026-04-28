@@ -1,6 +1,5 @@
 # ─── Firebase App Hosting — apphosting.yaml ───────────────────────────────
-# This file configures the Firebase App Hosting backend for TradeRoute AI.
-# Docs: https://firebase.google.com/docs/app-hosting/configure
+# Runtime config for TradeRoute AI Next.js app
 
 runConfig:
   minInstances: 0
@@ -9,34 +8,44 @@ runConfig:
   cpu: 1
   memoryMiB: 512
 
+# ─── Environment Variables ─────────────────────────────────────────────────
+# These are public Firebase config values (NEXT_PUBLIC_ = safe to commit).
+# Replace the placeholder values below with your actual Firebase project config.
+# Get them from: Firebase Console → Project Settings → Your Apps → Web App
+
 env:
-  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    secret: FIREBASE_PROJECT_ID
-    availability:
-      - BUILD
-      - RUNTIME
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    secret: FIREBASE_API_KEY
+    value: AIzaSyA6a6Y4Iy9FHpqO3fqVJiaX3lear3lWD1I
     availability:
       - BUILD
       - RUNTIME
+
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    secret: FIREBASE_AUTH_DOMAIN
+    value: traderoute-6a9e5.firebaseapp.com
     availability:
       - BUILD
       - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: traderoute-6a9e5
+    availability:
+      - BUILD
+      - RUNTIME
+
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    secret: FIREBASE_STORAGE_BUCKET
+    value: traderoute-6a9e5.firebasestorage.app
     availability:
       - BUILD
       - RUNTIME
+
   - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    secret: FIREBASE_MESSAGING_SENDER_ID
+    value: "616887919390"
     availability:
       - BUILD
       - RUNTIME
+
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    secret: FIREBASE_APP_ID
+    value: 1:616887919390:web:186b94664d5a301c3b1f0f
     availability:
       - BUILD
       - RUNTIME
