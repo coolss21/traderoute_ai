@@ -55,7 +55,7 @@ function getSeaMumbaiPath(originCity: string, dest: string): string[] {
     case "europe":
       return [originCity, "Suez Canal", "Strait of Hormuz", "JNPT Mumbai", dest];
     case "usa":
-      return [originCity, "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", dest];
+      return [originCity, "Pacific Ocean", "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", dest];
     case "middle_east":
       return [originCity, "Strait of Hormuz", "JNPT Mumbai", dest];
     case "japan_korea":
@@ -71,7 +71,7 @@ function getSeaChennaiPath(originCity: string, dest: string): string[] {
     case "europe":
       return [originCity, "Suez Canal", "Bay of Bengal", "Chennai Port", dest];
     case "usa":
-      return [originCity, "Malacca Strait", "Bay of Bengal", "Chennai Port", dest];
+      return [originCity, "Pacific Ocean", "Malacca Strait", "Bay of Bengal", "Chennai Port", dest];
     case "middle_east":
       return [originCity, "Strait of Hormuz", "Bay of Bengal", "Chennai Port", dest];
     case "japan_korea":
