@@ -8,77 +8,59 @@ interface Props {
 }
 
 const PRESETS = [
+  // ── Asia → India ──────────────────────────────────────────────────────────
   {
-    label: "🌍 Global: Plastics → Pune",
-    data: {
-      hsn_code: "3923",
-      origin: "Global Auto-Detect",
-      destination: "Pune",
-      quantity: 5000,
-      invoice_value: 25000,
-      urgency: "medium",
-      buyer_priority: "balance",
-    },
+    label: "🇨🇳 China → Pune",
+    data: { hsn_code: "3923", origin: "China", destination: "Pune", quantity: 5000, invoice_value: 25000, urgency: "medium", buyer_priority: "balance" },
   },
   {
-    label: "🌍 Global: Smartphones → Delhi",
-    data: {
-      hsn_code: "8517",
-      origin: "Global Auto-Detect",
-      destination: "Delhi",
-      quantity: 2000,
-      invoice_value: 150000,
-      urgency: "high",
-      buyer_priority: "speed",
-    },
+    label: "🇨🇳 Shanghai → Delhi (Hormuz)",
+    data: { hsn_code: "8517", origin: "Shanghai", destination: "Delhi", quantity: 3000, invoice_value: 200000, urgency: "critical", buyer_priority: "speed" },
   },
   {
-    label: "🌍 Global: Textiles → Mumbai",
-    data: {
-      hsn_code: "6110",
-      origin: "Global Auto-Detect",
-      destination: "Mumbai",
-      quantity: 10000,
-      invoice_value: 45000,
-      urgency: "low",
-      buyer_priority: "cost",
-    },
+    label: "🇻🇳 Vietnam → Mumbai",
+    data: { hsn_code: "6110", origin: "Vietnam", destination: "Mumbai", quantity: 12000, invoice_value: 55000, urgency: "low", buyer_priority: "cost" },
   },
   {
-    label: "🇨🇳 Shenzhen → Pune (Sea & Air)",
-    data: {
-      hsn_code: "3923",
-      origin: "China",
-      destination: "Pune",
-      quantity: 8000,
-      invoice_value: 35000,
-      urgency: "medium",
-      buyer_priority: "balance",
-    },
+    label: "🇸🇬 Singapore → Pune",
+    data: { hsn_code: "8471", origin: "Singapore", destination: "Pune", quantity: 2000, invoice_value: 80000, urgency: "high", buyer_priority: "speed" },
   },
   {
-    label: "🇨🇳 Shanghai → Delhi (Hormuz Route)",
-    data: {
-      hsn_code: "8517",
-      origin: "China",
-      destination: "Delhi",
-      quantity: 3000,
-      invoice_value: 200000,
-      urgency: "critical",
-      buyer_priority: "speed",
-    },
+    label: "🇯🇵 Japan → Delhi",
+    data: { hsn_code: "8703", origin: "Japan", destination: "Delhi", quantity: 500, invoice_value: 350000, urgency: "high", buyer_priority: "speed" },
   },
   {
-    label: "🇻🇳 Vietnam → Pune (Malacca Strait)",
-    data: {
-      hsn_code: "6110",
-      origin: "Vietnam",
-      destination: "Pune",
-      quantity: 12000,
-      invoice_value: 55000,
-      urgency: "low",
-      buyer_priority: "cost",
-    },
+    label: "🇰🇷 Korea → Mumbai",
+    data: { hsn_code: "8542", origin: "Korea", destination: "Mumbai", quantity: 1000, invoice_value: 120000, urgency: "medium", buyer_priority: "balance" },
+  },
+  // ── Europe → India ─────────────────────────────────────────────────────────
+  {
+    label: "🇩🇪 Germany → Delhi (Suez)",
+    data: { hsn_code: "8429", origin: "Germany", destination: "Delhi", quantity: 20, invoice_value: 500000, urgency: "low", buyer_priority: "cost" },
+  },
+  {
+    label: "🇳🇱 Rotterdam → Mumbai",
+    data: { hsn_code: "2710", origin: "Rotterdam", destination: "Mumbai", quantity: 50000, invoice_value: 180000, urgency: "medium", buyer_priority: "cost" },
+  },
+  // ── Middle East → India ────────────────────────────────────────────────────
+  {
+    label: "🇦🇪 Dubai → Pune",
+    data: { hsn_code: "7108", origin: "Dubai", destination: "Pune", quantity: 200, invoice_value: 900000, urgency: "critical", buyer_priority: "speed" },
+  },
+  // ── USA → India ────────────────────────────────────────────────────────────
+  {
+    label: "🇺🇸 Los Angeles → Mumbai",
+    data: { hsn_code: "8471", origin: "Los Angeles", destination: "Mumbai", quantity: 3000, invoice_value: 250000, urgency: "high", buyer_priority: "balance" },
+  },
+  // ── Southeast Asia → India ─────────────────────────────────────────────────
+  {
+    label: "🇹🇭 Bangkok → Pune",
+    data: { hsn_code: "4011", origin: "Bangkok", destination: "Pune", quantity: 8000, invoice_value: 40000, urgency: "medium", buyer_priority: "cost" },
+  },
+  // ── Auto-Detect ────────────────────────────────────────────────────────────
+  {
+    label: "🌍 Global → Delhi",
+    data: { hsn_code: "8517", origin: "Global Auto-Detect", destination: "Delhi", quantity: 2000, invoice_value: 150000, urgency: "high", buyer_priority: "speed" },
   },
 ];
 
@@ -177,8 +159,27 @@ export default function InputForm({ onSubmit, loading }: Props) {
               className="select-field text-brand-300 font-semibold"
             >
               <option value="Global Auto-Detect">🌍 Global Auto-Detect</option>
-              <option value="China">🇨🇳 China (Fixed)</option>
-              <option value="Vietnam">🇻🇳 Vietnam (Fixed)</option>
+              <optgroup label="East Asia">
+                <option value="China">🇨🇳 China (Shenzhen)</option>
+                <option value="Shanghai">🇨🇳 Shanghai</option>
+                <option value="Japan">🇯🇵 Japan (Tokyo)</option>
+                <option value="Korea">🇰🇷 South Korea (Seoul)</option>
+              </optgroup>
+              <optgroup label="Southeast Asia">
+                <option value="Vietnam">🇻🇳 Vietnam (Ho Chi Minh)</option>
+                <option value="Bangkok">🇹🇭 Thailand (Bangkok)</option>
+                <option value="Singapore">🇸🇬 Singapore</option>
+              </optgroup>
+              <optgroup label="Europe">
+                <option value="Germany">🇩🇪 Germany (Hamburg)</option>
+                <option value="Rotterdam">🇳🇱 Netherlands (Rotterdam)</option>
+              </optgroup>
+              <optgroup label="Middle East">
+                <option value="Dubai">🇦🇪 UAE (Dubai)</option>
+              </optgroup>
+              <optgroup label="Americas">
+                <option value="Los Angeles">🇺🇸 USA (Los Angeles)</option>
+              </optgroup>
             </select>
           </div>
           <div>

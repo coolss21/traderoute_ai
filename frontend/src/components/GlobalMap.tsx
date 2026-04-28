@@ -13,26 +13,54 @@ import type { Route } from "@/types";
 const geoUrl =
   "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-// Map names from the backend to Longitude, Latitude coordinates
+// Comprehensive world-wide coordinate map for all origin/destination/waypoint cities
 const cityCoordinates: Record<string, [number, number]> = {
-  Shenzhen: [114.0579, 22.5431],
-  Shanghai: [121.4737, 31.2304],
+  // ── East Asia ──────────────────────────────────────────────────────────────
+  Shenzhen:         [114.0579, 22.5431],
+  Shanghai:         [121.4737, 31.2304],
+  Guangzhou:        [113.2644, 23.1291],
+  Ningbo:           [121.5440, 29.8683],
+  Tokyo:            [139.6917, 35.6895],
+  Seoul:            [126.9780, 37.5665],
+
+  // ── Southeast Asia ──────────────────────────────────────────────────────────
   "Ho Chi Minh City": [106.6297, 10.8231],
-  Mumbai: [72.8777, 19.0760],
-  Pune: [73.8567, 18.5204],
-  "Chennai Port": [80.2707, 13.0827],
-  Delhi: [77.1025, 28.7041],
-  "Delhi IGI Airport": [77.10, 28.55],
-  Mundra: [69.7343, 22.8441],
-  "Mundra Port": [69.7343, 22.8441],
-  "Mumbai Port (JNPT)": [72.95, 18.95],
-  "JNPT Mumbai": [72.95, 18.95],
+  Bangkok:          [100.5018, 13.7563],
+  Singapore:        [103.8198,  1.3521],
+
+  // ── South Asia — Indian Cities ──────────────────────────────────────────────
+  Mumbai:           [72.8777, 19.0760],
+  "JNPT Mumbai":    [72.9500, 18.9500],
+  "Mumbai Port (JNPT)": [72.9500, 18.9500],
   "Mumbai Airport": [72.8777, 19.0760],
-  // Shipping lane waypoints
-  "Malacca Strait": [103.5, 1.5],
-  "Strait of Hormuz": [56.5, 26.5],
-  "Bay of Bengal": [88.0, 12.0],
-  "Suez Canal": [32.5, 30.5],
+  Pune:             [73.8567, 18.5204],
+  Delhi:            [77.1025, 28.7041],
+  "Delhi IGI Airport": [77.1000, 28.5500],
+  "Chennai Port":   [80.2707, 13.0827],
+  Kolkata:          [88.3639, 22.5726],
+  Mundra:           [69.7343, 22.8441],
+  "Mundra Port":    [69.7343, 22.8441],
+
+  // ── Middle East ─────────────────────────────────────────────────────────────
+  Dubai:            [55.2708, 25.2048],
+  "Jebel Ali":      [55.0272, 24.9990],
+  "Abu Dhabi":      [54.3773, 24.4539],
+
+  // ── Europe ──────────────────────────────────────────────────────────────────
+  Hamburg:          [9.9937, 53.5511],
+  Rotterdam:        [4.4777, 51.9244],
+  London:           [-0.1276, 51.5074],
+
+  // ── USA ─────────────────────────────────────────────────────────────────────
+  "Los Angeles":    [-118.2437, 34.0522],
+  "New York":       [-74.0060, 40.7128],
+
+  // ── Shipping Lane Waypoints ──────────────────────────────────────────────────
+  "Malacca Strait": [103.5000,  1.5000],
+  "Strait of Hormuz": [56.5000, 26.5000],
+  "Bay of Bengal":  [88.0000, 12.0000],
+  "Suez Canal":     [32.5000, 30.5000],
+  "Pacific Ocean":  [160.0000, 15.0000],
 };
 
 interface Props {
@@ -50,6 +78,7 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
       isRecommended: boolean;
       mode: string;
       routeType: string;
+      isDisrupted: boolean;
     }> = [];
 
     routes.forEach((route) => {
@@ -59,6 +88,8 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
         ? "#f87171" // danger-400
         : "#3390ff"; // brand-500
 
+      const disruptedNodes: string[] = route.risk_assessment.disrupted_nodes ?? [];
+
       for (let i = 0; i < route.path.length - 1; i++) {
         const startName = route.path[i];
         const endName = route.path[i + 1];
@@ -66,13 +97,15 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
         const endCoord = cityCoordinates[endName];
 
         if (startCoord && endCoord) {
+          const isDisrupted = disruptedNodes.includes(startName) || disruptedNodes.includes(endName);
           lines.push({
             start: startCoord,
             end: endCoord,
             color,
             isRecommended: route.is_recommended,
             mode: route.mode,
-            routeType: route.route_type
+            routeType: route.route_type,
+            isDisrupted
           });
         }
       }
@@ -119,14 +152,18 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
           <span className="w-4 h-0.5 bg-danger-400 shadow-[0_0_8px_#f87171]" />
           <span>Cost Illusion</span>
         </div>
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider font-semibold text-white/80">
+          <span className="w-4 h-0.5 bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse" />
+          <span>Disrupted</span>
+        </div>
       </div>
 
       <div className="h-[500px] w-full mt-4 -mb-12 relative z-0">
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
-            scale: 850,
-            center: [85, 22], // Center between India and East Asia
+            scale: 280,
+            center: [60, 20],
           }}
           style={{ width: "100%", height: "100%" }}
         >
@@ -160,12 +197,12 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
                 <Line
                   from={line.start}
                   to={line.end}
-                  stroke={line.color}
+                  stroke={line.isDisrupted ? "#ef4444" : line.color}
                   strokeWidth={isHovered ? 8 : line.isRecommended ? 6 : 4}
                   strokeLinecap="round"
                   style={{
-                    strokeOpacity: isDimmed ? 0 : 0.15,
-                    filter: `drop-shadow(0px 0px 8px ${line.color})`,
+                    strokeOpacity: isDimmed ? 0 : line.isDisrupted ? 0.3 : 0.15,
+                    filter: `drop-shadow(0px 0px 8px ${line.isDisrupted ? "#ef4444" : line.color})`,
                     transition: "all 0.4s ease-in-out",
                   }}
                 />
@@ -173,14 +210,14 @@ export default function GlobalMap({ routes, hoveredRoute }: Props) {
                 <Line
                   from={line.start}
                   to={line.end}
-                  stroke={line.color}
+                  stroke={line.isDisrupted ? "#ef4444" : line.color}
                   strokeWidth={isHovered ? 2.5 : line.isRecommended ? 2 : 1.5}
                   strokeLinecap="round"
-                  className={line.isRecommended && !isDimmed ? "animate-pulse" : ""}
+                  className={(line.isRecommended || line.isDisrupted) && !isDimmed ? "animate-pulse" : ""}
                   style={{
                     strokeDasharray: line.mode === "air" ? "6, 6" : "none",
                     strokeOpacity: isDimmed ? 0.2 : 1,
-                    filter: isDimmed ? "none" : `drop-shadow(0px 0px 4px ${line.color})`,
+                    filter: isDimmed ? "none" : `drop-shadow(0px 0px 4px ${line.isDisrupted ? "#ef4444" : line.color})`,
                     transition: "all 0.4s ease-in-out",
                   }}
                 />
