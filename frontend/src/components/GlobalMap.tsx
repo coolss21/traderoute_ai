@@ -25,8 +25,14 @@ const cityCoordinates: Record<string, [number, number]> = {
   Mundra: [69.7343, 22.8441],
   "Mundra Port": [69.7343, 22.8441],
   "Mumbai Port (JNPT)": [72.95, 18.95],
+  "JNPT Mumbai": [72.95, 18.95],
   "Delhi IGI Airport": [77.10, 28.55],
-  "Mumbai Airport": [72.8777, 19.0760], // Simplification
+  "Mumbai Airport": [72.8777, 19.0760],
+  // Shipping lane waypoints
+  "Malacca Strait": [103.5, 1.5],
+  "Strait of Hormuz": [56.5, 26.5],
+  "Bay of Bengal": [88.0, 12.0],
+  "Suez Canal": [32.5, 30.5],
 };
 
 interface Props {

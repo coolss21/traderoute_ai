@@ -15,7 +15,7 @@ const ROUTE_TEMPLATES = [
     route_type: "cheapest",
     name: "Sea via Mumbai",
     mode: "sea",
-    path_template: (origin: string) => [origin, "JNPT Mumbai", "Pune"],
+    path_template: (origin: string) => [origin, "Malacca Strait", "Strait of Hormuz", "JNPT Mumbai", "Pune"],
     transit_days: 28,
     port_name: "JNPT Mumbai",
     co2_factor: 0.012, // kg per $ of invoice
@@ -40,7 +40,7 @@ const ROUTE_TEMPLATES = [
     route_type: "balanced",
     name: "Sea via Chennai",
     mode: "sea",
-    path_template: (origin: string) => [origin, "Chennai Port", "Pune"],
+    path_template: (origin: string) => [origin, "Malacca Strait", "Bay of Bengal", "Chennai Port", "Pune"],
     transit_days: 30,
     port_name: "Chennai Port",
     co2_factor: 0.011,
