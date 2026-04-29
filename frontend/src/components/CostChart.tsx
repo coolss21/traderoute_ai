@@ -32,7 +32,7 @@ export default function CostChart({ routes }: Props) {
 
   const CustomTooltip = ({ active, payload, label }: {active?: boolean; payload?: Array<{name: string; value: number; color: string; payload: Record<string, unknown>}>; label?: string}) => {
     if (!active || !payload || !payload.length) return null;
-    const { fullPath } = payload[0].payload;
+    const fullPath = payload[0].payload?.fullPath as string | undefined;
     return (
       <div className="glass-card p-4 text-sm border border-white/10 max-w-[280px]">
         <p className="font-semibold text-white mb-1">{label}</p>
