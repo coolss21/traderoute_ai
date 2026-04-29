@@ -459,6 +459,16 @@ export default function RouteComparison({ routes }: Props) {
                     </td>
                   ))}
                 </tr>
+                <tr>
+                  <td className="px-5 py-3 text-xs text-white/50">Transit Path</td>
+                  {visibleRoutes.map((r) => (
+                    <td key={r.route_type} className="px-5 py-3 text-right">
+                      <div className="text-[10px] text-white/60 leading-tight max-w-[140px] ml-auto">
+                        {r.path.join(" → ")}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
               </tbody>
             </table>
           </div>

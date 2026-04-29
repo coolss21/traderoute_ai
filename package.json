@@ -1,0 +1,14 @@
+{
+  "name": "traderoute-ai-root",
+  "version": "1.0.0",
+  "description": "TradeRoute AI - Root package for local development",
+  "scripts": {
+    "dev:backend": "cd backend && .\\venv\\Scripts\\python.exe main.py",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "npx -y concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "install:all": "npm install --prefix frontend && cd backend && py -m venv venv && .\\venv\\Scripts\\pip.exe install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

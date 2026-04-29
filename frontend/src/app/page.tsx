@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import AnalysisLoader from "@/components/AnalysisLoader";
 import ScenarioSimulator from "@/components/ScenarioSimulator";
 import ExportButton from "@/components/ExportButton";
+import { GLOBAL_PRESETS } from "@/data/globalPresets";
 import type { AnalyzeResponse } from "@/types";
 
 export default function Home() {
@@ -20,11 +21,27 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hoveredRoute, setHoveredRoute] = useState<string | null>(null);
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+  const [activeDisruptionType, setActiveDisruptionType] = useState<string | null>(null);
 
   const handleAnalyze = async (formData: Record<string, unknown>) => {
     setLoading(true);
     setError(null);
     setData(null);
+    // Extract preset id if available in formData (we'll add this to InputForm)
+    if (formData.presetId) {
+      setSelectedPresetId(formData.presetId as string);
+    } else {
+      setSelectedPresetId(null);
+    }
+    
+    // Explicitly track the UI selection so we can force the circles to render
+    if (formData.simulate_disruption) {
+      setActiveDisruptionType(formData.simulate_disruption as string);
+    } else {
+      setActiveDisruptionType(null);
+    }
+
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -36,6 +53,31 @@ export default function Home() {
         throw new Error(err.detail || "Analysis failed");
       }
       const result: AnalyzeResponse = await res.json();
+      
+      // Enrich backend results with preset path names if a preset is active
+      if (formData.presetId && GLOBAL_PRESETS[formData.presetId as string]) {
+        const preset = GLOBAL_PRESETS[formData.presetId as string];
+        result.routes = result.routes.map(r => {
+          // Find corresponding route in preset by matching mode and roughly origin/dest
+          const presetRoute = preset.routes.find(pr => 
+            pr.type === r.mode && 
+            (pr.id.includes(r.route_type) || pr.label.toLowerCase().includes(r.mode))
+          ) || preset.routes[0]; // Fallback to first preset route if no clear match
+
+          return {
+            ...r,
+            // Replace backend path with full preset nodes sequence
+            path: (() => {
+               let pathNodes = [...presetRoute.nodes];
+               if (pathNodes[pathNodes.length - 1] !== result.destination) {
+                 pathNodes.push(result.destination);
+               }
+               return pathNodes;
+            })()
+          };
+        });
+      }
+
       setData(result);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -102,9 +144,14 @@ export default function Home() {
               <CostChart routes={data.routes} />
             </section>
 
-            {/* 3D Globe */}
+            {/* 3D Globe - ALWAYS visible now to support preset selection */}
             <section id="global-map" className="animate-slide-up" style={{ animationDelay: "150ms" }}>
-              <GlobeMap routes={data.routes} hoveredRoute={hoveredRoute} />
+              <GlobeMap 
+                routes={data.routes} 
+                hoveredRoute={hoveredRoute} 
+                selectedPresetId={selectedPresetId}
+                activeDisruptionType={activeDisruptionType}
+              />
             </section>
 
             {/* What-If Scenario Simulator */}
@@ -144,6 +191,11 @@ export default function Home() {
               Enter your shipment details above to compare routes, detect hidden costs,
               and get an AI-powered recommendation for your procurement decision.
             </p>
+            
+            {/* Show empty globe on initial load */}
+            <div className="mt-12 max-w-5xl mx-auto opacity-40 hover:opacity-100 transition-opacity duration-700">
+               <GlobeMap routes={[]} hoveredRoute={null} selectedPresetId={null} activeDisruptionType={null} />
+            </div>
           </div>
         )}
       </div>

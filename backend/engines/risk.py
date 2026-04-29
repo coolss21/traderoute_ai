@@ -65,6 +65,7 @@ def compute_risk(
             "south korea": "South Korea", "shenzhen": "Shenzhen Port",
             "shanghai": "Shanghai Port", "hong kong": "Hong Kong",
             "guangzhou": "Guangzhou Port", "ningbo": "Ningbo Port",
+            "malacca": "Strait of Malacca", "singapore": "Singapore Port"
         }
         hits = [label for key, label in typhoon_zones.items() if key in combined]
         if hits:
@@ -81,6 +82,7 @@ def compute_risk(
             "usa": "USA", "los angeles": "Los Angeles Port",
             "new york": "New York Port", "jebel ali": "Jebel Ali (Dubai)",
             "hormuz": "Strait of Hormuz", "suez": "Suez Canal",
+            "dubai": "Dubai", "doha": "Doha"
         }
         hits = [label for key, label in war_zones.items() if key in combined]
         if hits:

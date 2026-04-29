@@ -9,56 +9,76 @@ interface Props {
 
 const PRESETS = [
   {
-    label: "🇨🇳 China → Pune",
-    data: { hsn_code: "3923", origin: "China", destination: "Pune", quantity: 5000, invoice_value: 25000, urgency: "medium", buyer_priority: "balance" },
+    id: "preset_1",
+    label: "🌏 Asia → India",
+    data: { hsn_code: "3923", origin: "Shanghai", destination: "Mumbai", quantity: 5000, invoice_value: 25000, urgency: "medium", buyer_priority: "balance" },
   },
   {
-    label: "🇨🇳 Shanghai → Delhi (Hormuz)",
-    data: { hsn_code: "8517", origin: "Shanghai", destination: "Delhi", quantity: 3000, invoice_value: 200000, urgency: "critical", buyer_priority: "speed" },
+    id: "preset_2",
+    label: "🕌 Middle East → India",
+    data: { hsn_code: "7108", origin: "Dubai", destination: "Chennai", quantity: 200, invoice_value: 90000, urgency: "high", buyer_priority: "balance" },
   },
   {
-    label: "🇻🇳 Vietnam → Mumbai",
-    data: { hsn_code: "6110", origin: "Vietnam", destination: "Mumbai", quantity: 12000, invoice_value: 55000, urgency: "low", buyer_priority: "cost" },
-  },
-  {
-    label: "🇩🇪 Germany → Delhi (Suez)",
+    id: "preset_3",
+    label: "🇪🇺 Europe → India",
     data: { hsn_code: "8429", origin: "Germany", destination: "Delhi", quantity: 20, invoice_value: 500000, urgency: "low", buyer_priority: "cost" },
   },
   {
-    label: "🇦🇪 Dubai → Pune",
-    data: { hsn_code: "7108", origin: "Dubai", destination: "Pune", quantity: 200, invoice_value: 90000, urgency: "high", buyer_priority: "balance" },
+    id: "preset_4",
+    label: "🇺🇸 USA → India",
+    data: { hsn_code: "8471", origin: "Los Angeles", destination: "Mumbai", quantity: 3000, invoice_value: 250000, urgency: "high", buyer_priority: "balance" },
   },
   {
-    label: "🇺🇸 Los Angeles → Mumbai",
-    data: { hsn_code: "8471", origin: "Los Angeles", destination: "Mumbai", quantity: 3000, invoice_value: 250000, urgency: "high", buyer_priority: "balance" },
+    id: "preset_5",
+    label: "🇯🇵 East Asia → India",
+    data: { hsn_code: "8517", origin: "Tokyo", destination: "Mumbai", quantity: 3000, invoice_value: 150000, urgency: "medium", buyer_priority: "speed" },
+  },
+  {
+    id: "preset_6",
+    label: "🇮🇳 India Domestic",
+    data: { hsn_code: "3923", origin: "Mundra", destination: "Chennai", quantity: 10000, invoice_value: 15000, urgency: "low", buyer_priority: "cost" },
   },
 ];
 
 export default function InputForm({ onSubmit, loading }: Props) {
   const [form, setForm] = useState({
-    hsn_code: "3923",
-    origin: "Global Auto-Detect",
-    destination: "Pune",
-    quantity: 5000,
-    invoice_value: 25000,
-    urgency: "medium",
+    hsn_code: "7108",
+    origin: "Dubai",
+    destination: "Chennai",
+    quantity: 200,
+    invoice_value: 90000,
+    urgency: "high",
     buyer_priority: "balance",
     simulate_disruption: "",
+    presetId: "preset_2",
   });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setForm((p) => ({
-      ...p,
-      [name]:
-        name === "quantity" || name === "invoice_value" ? Number(value) : value,
-    }));
+    setForm((p) => {
+      const newForm = {
+        ...p,
+        [name]: name === "quantity" || name === "invoice_value" ? Number(value) : value,
+      };
+      
+      // Auto-submit immediately if the disruption scenario changes
+      if (name === "simulate_disruption") {
+        setTimeout(() => {
+          document.getElementById('analyze-button')?.click();
+        }, 10);
+      }
+      
+      return newForm;
+    });
   };
 
-  const handlePreset = (data: Omit<typeof form, "simulate_disruption">) => {
-    setForm({ ...data, simulate_disruption: "" });
+  const handlePreset = (id: string, data: Omit<typeof form, "simulate_disruption" | "presetId">) => {
+    setForm({ ...form, ...data, presetId: id, simulate_disruption: "" });
+    setTimeout(() => {
+      document.getElementById('analyze-button')?.click();
+    }, 10);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -91,7 +111,7 @@ export default function InputForm({ onSubmit, loading }: Props) {
             <button
               key={p.label}
               type="button"
-              onClick={() => handlePreset(p.data)}
+              onClick={() => handlePreset(p.id, p.data)}
               className="text-xs px-3 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.08] text-white/60
                          hover:bg-white/[0.1] hover:text-white hover:border-white/[0.15] transition-all duration-200"
             >
@@ -147,7 +167,7 @@ export default function InputForm({ onSubmit, loading }: Props) {
               value={form.destination}
               onChange={handleChange}
               className="input-field"
-              placeholder="e.g. Pune"
+              placeholder="e.g. Chennai"
               required
             />
           </div>

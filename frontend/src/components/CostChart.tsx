@@ -19,7 +19,8 @@ interface Props {
 
 export default function CostChart({ routes }: Props) {
   const chartData = routes.map((r) => ({
-    name: r.path.slice(-2).join(" → "),
+    name: `${r.path[0]} → ${r.path[r.path.length-1]}`,
+    fullPath: r.path.join(" → "),
     mode: r.mode === "air" ? "✈️ Air" : "🚢 Sea",
     baseCost: r.cost_breakdown.total_landed_cost,
     hiddenCost: r.risk_assessment.hidden_cost,
@@ -30,10 +31,12 @@ export default function CostChart({ routes }: Props) {
   }));
 
   const CustomTooltip = ({ active, payload, label }: {active?: boolean; payload?: Array<{name: string; value: number; color: string}>; label?: string}) => {
-    if (!active || !payload) return null;
+    if (!active || !payload || !payload.length) return null;
+    const { fullPath } = payload[0].payload;
     return (
-      <div className="glass-card p-4 text-sm border border-white/10">
-        <p className="font-semibold text-white mb-2">{label}</p>
+      <div className="glass-card p-4 text-sm border border-white/10 max-w-[280px]">
+        <p className="font-semibold text-white mb-1">{label}</p>
+        <p className="text-[10px] text-white/40 mb-3 leading-tight">{fullPath}</p>
         {payload.map((entry, i) => (
           <div key={i} className="flex items-center justify-between gap-6 py-0.5">
             <span className="flex items-center gap-2">

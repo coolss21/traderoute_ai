@@ -9,9 +9,11 @@ const GlobeMapInner = dynamic(() => import("./GlobeMapInner"), { ssr: false });
 interface Props {
   routes: Route[];
   hoveredRoute: string | null;
+  selectedPresetId: string | null;
+  activeDisruptionType: string | null;
 }
 
-export default function GlobeMap({ routes, hoveredRoute }: Props) {
+export default function GlobeMap({ routes, hoveredRoute, selectedPresetId, activeDisruptionType }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(800);
   const [showAllPorts, setShowAllPorts] = useState(false);
@@ -105,6 +107,8 @@ export default function GlobeMap({ routes, hoveredRoute }: Props) {
           <GlobeMapInner
             routes={routes}
             hoveredRoute={hoveredRoute}
+            selectedPresetId={selectedPresetId}
+            activeDisruptionType={activeDisruptionType}
             width={width}
             height={HEIGHT}
             showAllPorts={showAllPorts}
