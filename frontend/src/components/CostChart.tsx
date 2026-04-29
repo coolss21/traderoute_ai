@@ -30,7 +30,7 @@ export default function CostChart({ routes }: Props) {
     routeType: r.route_type,
   }));
 
-  const CustomTooltip = ({ active, payload, label }: {active?: boolean; payload?: Array<{name: string; value: number; color: string}>; label?: string}) => {
+  const CustomTooltip = ({ active, payload, label }: {active?: boolean; payload?: Array<{name: string; value: number; color: string; payload: Record<string, unknown>}>; label?: string}) => {
     if (!active || !payload || !payload.length) return null;
     const { fullPath } = payload[0].payload;
     return (
